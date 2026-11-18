@@ -1,0 +1,99 @@
+[
+    {
+        "id": "9c59550959d12f32",
+        "type": "tab",
+        "label": "MQTT Keep-alive",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "99347688aa96ced6",
+        "type": "mqtt out",
+        "z": "9c59550959d12f32",
+        "name": "Keepalive to Internal MQTT",
+        "topic": "R/c0619ab12345/keepalive",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6b7edf2f8f700efc",
+        "x": 340,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "436c13f4ea0f7204",
+        "type": "inject",
+        "z": "9c59550959d12f32",
+        "name": "Every 30s",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "99347688aa96ced6"
+            ]
+        ]
+    },
+    {
+        "id": "6b7edf2f8f700efc",
+        "type": "mqtt-broker",
+        "name": "Cerbo",
+        "broker": "localhost",
+        "port": "8883",
+        "tls": "8eb359230e21e346",
+        "clientid": "NodeRed",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8eb359230e21e346",
+        "type": "tls-config",
+        "name": "CerboInternal",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    }
+]
