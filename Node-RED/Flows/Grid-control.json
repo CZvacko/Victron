@@ -1,0 +1,899 @@
+[
+    {
+        "id": "ee316a5134bafa11",
+        "type": "tab",
+        "label": "Grid control",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "402a36a41a536884",
+        "type": "junction",
+        "z": "ee316a5134bafa11",
+        "x": 420,
+        "y": 120,
+        "wires": [
+            [
+                "45551dc1bee25689"
+            ]
+        ]
+    },
+    {
+        "id": "40f32a2b5f423eb0",
+        "type": "junction",
+        "z": "ee316a5134bafa11",
+        "x": 900,
+        "y": 440,
+        "wires": [
+            [
+                "5f3a28bcdf9385d7",
+                "d34717817a9985b7"
+            ]
+        ]
+    },
+    {
+        "id": "57632790311aa729",
+        "type": "junction",
+        "z": "ee316a5134bafa11",
+        "x": 900,
+        "y": 640,
+        "wires": [
+            [
+                "e9690e1bc9f42758",
+                "bfaefe448e87f319"
+            ]
+        ]
+    },
+    {
+        "id": "ee1b84120e6686df",
+        "type": "debug",
+        "z": "ee316a5134bafa11",
+        "name": "debug payload",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "5683fea7ba1b1dbf",
+        "type": "victron-input-system",
+        "z": "ee316a5134bafa11",
+        "outputs": 1,
+        "service": "com.victronenergy.system",
+        "path": "/Dc/Battery/Soc",
+        "serviceObj": {
+            "service": "com.victronenergy.system",
+            "name": "Venus system",
+            "communityTag": "system"
+        },
+        "pathObj": {
+            "path": "/Dc/Battery/Soc",
+            "type": "float",
+            "name": "Battery State of Charge (%)"
+        },
+        "name": "Soc",
+        "onlyChanges": true,
+        "roundValues": "1",
+        "rateLimit": "0.2",
+        "conditionalMode": false,
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "outputTrue": "",
+        "outputFalse": "",
+        "debounce": "",
+        "x": 90,
+        "y": 200,
+        "wires": [
+            [
+                "dd55b7bb39ddc109"
+            ]
+        ]
+    },
+    {
+        "id": "6ab7dafc7cf2eb78",
+        "type": "interactive-inject",
+        "z": "ee316a5134bafa11",
+        "name": "Soc",
+        "topic": "Soc",
+        "outputProperty": "payload",
+        "mode": "slider",
+        "minValue": 20,
+        "maxValue": 55,
+        "step": 1,
+        "defaultValue": 40,
+        "currentValue": 55,
+        "sliderBehaviour": "none",
+        "injectOnRelease": true,
+        "autoCollapse": false,
+        "presets": [],
+        "outputAsJsonata": false,
+        "outputJsonata": "{\"Soc\": $value}",
+        "x": 90,
+        "y": 80,
+        "wires": [
+            [
+                "dd55b7bb39ddc109"
+            ]
+        ]
+    },
+    {
+        "id": "dd55b7bb39ddc109",
+        "type": "hysteresis",
+        "z": "ee316a5134bafa11",
+        "name": "Soc levels",
+        "setpoint": "60",
+        "hysteresis": "30",
+        "mode": "high",
+        "initialState": "undefined",
+        "x": 310,
+        "y": 200,
+        "wires": [
+            [
+                "45551dc1bee25689"
+            ]
+        ],
+        "icon": "font-awesome/fa-battery-quarter"
+    },
+    {
+        "id": "45cfe0d9db911e4c",
+        "type": "victron-input-digitalinput",
+        "z": "ee316a5134bafa11",
+        "outputs": 1,
+        "service": "com.victronenergy.digitalinput/1",
+        "path": "/State",
+        "serviceObj": {
+            "service": "com.victronenergy.digitalinput/1",
+            "name": "Allow offgrid",
+            "communityTag": "digitalinput"
+        },
+        "pathObj": {
+            "path": "/State",
+            "type": "enum",
+            "name": "Digital input state",
+            "enum": {
+                "0": "low",
+                "1": "high",
+                "2": "off",
+                "3": "on",
+                "4": "no",
+                "5": "yes",
+                "6": "open",
+                "7": "closed",
+                "8": "ok",
+                "9": "alarm",
+                "10": "running",
+                "11": "stopped"
+            }
+        },
+        "name": "DI allow Offgrid",
+        "onlyChanges": true,
+        "roundValues": "no",
+        "rateLimit": "0.2",
+        "conditionalMode": false,
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "debounce": "2000",
+        "x": 300,
+        "y": 120,
+        "wires": [
+            [
+                "402a36a41a536884"
+            ]
+        ]
+    },
+    {
+        "id": "c3202347ad76fc9c",
+        "type": "inject",
+        "z": "ee316a5134bafa11",
+        "name": "DI open",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DI allow Offgrid",
+        "payload": "6",
+        "payloadType": "num",
+        "x": 330,
+        "y": 40,
+        "wires": [
+            [
+                "402a36a41a536884"
+            ]
+        ]
+    },
+    {
+        "id": "bee9d8628f27ae4e",
+        "type": "inject",
+        "z": "ee316a5134bafa11",
+        "name": "DI closed",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "DI allow Offgrid",
+        "payload": "7",
+        "payloadType": "num",
+        "x": 320,
+        "y": 80,
+        "wires": [
+            [
+                "402a36a41a536884"
+            ]
+        ]
+    },
+    {
+        "id": "45551dc1bee25689",
+        "type": "function",
+        "z": "ee316a5134bafa11",
+        "name": "set payload",
+        "func": "// Node-RED Function node\n// Stores inputs as flow variables (with defaults) and outputs only for expected topics.\n\nlet grid = flow.get('DiAllowOffgrid');\nlet soc  = flow.get('IsOffgridSoc');\nlet volt  = flow.get('IsOffgridVolt');\n\n// defaults\nif (grid === undefined) grid = false;\nif (soc === undefined) soc = false;\nif (volt === undefined) volt = false;\n\nlet handled = false;\n\nif (msg.topic === 'DI allow Offgrid') {\n    const v = Number(msg.payload);\n    if (v === 7) grid = true;\n    else grid = false;\n\n    flow.set('DiAllowOffgrid', grid);\n    handled = true; \n} else if (msg.topic === 'Soc') {\n    soc = msg.payload; \n    flow.set('IsOffgridSoc', soc);\n    handled = true;\n} else if (msg.topic === 'BatteryVoltage') {\n    volt = msg.payload; \n    flow.set('IsOffgridVolt', volt);\n    handled = true;\n}\n// return message only when known message arrive\nif (!handled) return null;\n\n// MultiPlus switch position:\n// 2 - Inverter Only, 3 - On\nconst allTrue = grid && soc && volt;\nconst outPayload = allTrue ? 2 : 3;\n\nnode.status({\n    fill: allTrue ? \"green\" : \"red\",\n    shape: \"dot\",\n    text: allTrue ? `Inverter Only` : `On`\n});\n\nreturn { topic: 'SwitchPosition', payload: outPayload };\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.diState = context.diState || 6;\ncontext.isHighSoc = context.isHighSoc || false;",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 200,
+        "wires": [
+            [
+                "ee1b84120e6686df",
+                "04b0f61d1440b710"
+            ]
+        ]
+    },
+    {
+        "id": "d34717817a9985b7",
+        "type": "victron-output-vebus",
+        "z": "ee316a5134bafa11",
+        "outputs": 0,
+        "service": "com.victronenergy.vebus/276",
+        "path": "/Mode",
+        "serviceObj": {
+            "service": "com.victronenergy.vebus/276",
+            "name": "MultiPlus-II 48/6k5/100-50",
+            "communityTag": "vebus"
+        },
+        "pathObj": {
+            "path": "/Mode",
+            "type": "enum",
+            "name": "Switch Position",
+            "enum": {
+                "1": "Charger Only",
+                "2": "Inverter Only",
+                "3": "On",
+                "4": "Off"
+            },
+            "mode": "both"
+        },
+        "name": "MultiPlus switch position",
+        "onlyChanges": false,
+        "roundValues": "no",
+        "rateLimit": 0,
+        "conditionalMode": false,
+        "condition1Operator": ">",
+        "condition2Enabled": false,
+        "condition2Service": "",
+        "condition2Path": "",
+        "condition2Operator": ">",
+        "logicOperator": "AND",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "outputOnChange": false,
+        "debounce": 2000,
+        "x": 1070,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "b24e8b68c70d4029",
+        "type": "victron-input-battery",
+        "z": "ee316a5134bafa11",
+        "outputs": 1,
+        "service": "com.victronenergy.battery/279",
+        "path": "/Dc/0/Voltage",
+        "serviceObj": {
+            "service": "com.victronenergy.battery/279",
+            "name": "SmartShunt 300A",
+            "communityTag": "battery"
+        },
+        "pathObj": {
+            "path": "/Dc/0/Voltage",
+            "type": "float",
+            "name": "Battery voltage (V)"
+        },
+        "name": "BatteryVoltage",
+        "onlyChanges": true,
+        "roundValues": "1",
+        "rateLimit": "0.2",
+        "conditionalMode": false,
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "debounce": "2000",
+        "x": 120,
+        "y": 260,
+        "wires": [
+            [
+                "a25ce25f4fb9ca45"
+            ]
+        ]
+    },
+    {
+        "id": "a25ce25f4fb9ca45",
+        "type": "hysteresis",
+        "z": "ee316a5134bafa11",
+        "name": "Volt levels",
+        "setpoint": "50",
+        "hysteresis": "1",
+        "mode": "high",
+        "initialState": "undefined",
+        "x": 300,
+        "y": 260,
+        "wires": [
+            [
+                "45551dc1bee25689"
+            ]
+        ],
+        "icon": "font-awesome/fa-bolt"
+    },
+    {
+        "id": "79d6385e82052d3e",
+        "type": "interactive-inject",
+        "z": "ee316a5134bafa11",
+        "name": "BatteryVoltage",
+        "topic": "BatteryVoltage",
+        "outputProperty": "payload",
+        "mode": "slider",
+        "minValue": 46,
+        "maxValue": 56,
+        "step": 1,
+        "defaultValue": 54,
+        "currentValue": 56,
+        "sliderBehaviour": "none",
+        "injectOnRelease": true,
+        "autoCollapse": false,
+        "presets": [],
+        "outputAsJsonata": false,
+        "outputJsonata": "{\"Soc\": $value}",
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "a25ce25f4fb9ca45"
+            ]
+        ]
+    },
+    {
+        "id": "51321c62ce7eba36",
+        "type": "victron-input-vebus",
+        "z": "ee316a5134bafa11",
+        "outputs": 1,
+        "service": "com.victronenergy.vebus/276",
+        "path": "/Mode",
+        "serviceObj": {
+            "service": "com.victronenergy.vebus/276",
+            "name": "MultiPlus-II 48/6k5/100-50",
+            "communityTag": "vebus"
+        },
+        "pathObj": {
+            "path": "/Mode",
+            "type": "enum",
+            "name": "Switch Position",
+            "enum": {
+                "1": "Charger Only",
+                "2": "Inverter Only",
+                "3": "On",
+                "4": "Off"
+            },
+            "mode": "both"
+        },
+        "name": "Switch position",
+        "onlyChanges": true,
+        "roundValues": "no",
+        "rateLimit": "1",
+        "conditionalMode": false,
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "debounce": "2000",
+        "x": 800,
+        "y": 40,
+        "wires": [
+            [
+                "95d545dc7db58b84"
+            ]
+        ]
+    },
+    {
+        "id": "95d545dc7db58b84",
+        "type": "function",
+        "z": "ee316a5134bafa11",
+        "name": "Sync global.switchPosition",
+        "func": "const pos = Number(msg.payload);\nglobal.set('switchPosition', pos);\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "04b0f61d1440b710",
+        "type": "switch",
+        "z": "ee316a5134bafa11",
+        "name": "payload 2/3",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 130,
+        "y": 540,
+        "wires": [
+            [
+                "61cc0e91e2503c61",
+                "4e235c22f6521ec6"
+            ],
+            [
+                "549c387f91d693c9",
+                "2daa6bebb52bb31a"
+            ]
+        ]
+    },
+    {
+        "id": "59e634f5a2dc9ee7",
+        "type": "trigger",
+        "z": "ee316a5134bafa11",
+        "name": "after 5s -> payload=0",
+        "op1": "",
+        "op2": "0",
+        "op1type": "nul",
+        "op2type": "num",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "reset",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 720,
+        "y": 500,
+        "wires": [
+            [
+                "57632790311aa729"
+            ]
+        ]
+    },
+    {
+        "id": "510bb6fa07a973bb",
+        "type": "change",
+        "z": "ee316a5134bafa11",
+        "name": "set payload=1",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "x": 700,
+        "y": 640,
+        "wires": [
+            [
+                "57632790311aa729"
+            ]
+        ]
+    },
+    {
+        "id": "82186c448cab7944",
+        "type": "trigger",
+        "z": "ee316a5134bafa11",
+        "name": "after 5s -> payload=3",
+        "op1": "",
+        "op2": "3",
+        "op1type": "nul",
+        "op2type": "num",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "reset",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 720,
+        "y": 580,
+        "wires": [
+            [
+                "40f32a2b5f423eb0",
+                "190ceb811471a91c"
+            ]
+        ]
+    },
+    {
+        "id": "5f3a28bcdf9385d7",
+        "type": "debug",
+        "z": "ee316a5134bafa11",
+        "name": "debug SwitchPosition",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e9690e1bc9f42758",
+        "type": "debug",
+        "z": "ee316a5134bafa11",
+        "name": "debug Relay2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "54866e45c78c6fb5",
+        "type": "change",
+        "z": "ee316a5134bafa11",
+        "name": "set payload=2",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            }
+        ],
+        "x": 700,
+        "y": 440,
+        "wires": [
+            [
+                "40f32a2b5f423eb0",
+                "9f39814164a9eebf"
+            ]
+        ]
+    },
+    {
+        "id": "61cc0e91e2503c61",
+        "type": "switch",
+        "z": "ee316a5134bafa11",
+        "name": "send 2 only when other MP value set",
+        "property": "switchPosition",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "2",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 440,
+        "wires": [
+            [
+                "54866e45c78c6fb5"
+            ]
+        ]
+    },
+    {
+        "id": "549c387f91d693c9",
+        "type": "switch",
+        "z": "ee316a5134bafa11",
+        "name": "send 3 only when other MP value set",
+        "property": "switchPosition",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "3",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "x": 430,
+        "y": 580,
+        "wires": [
+            [
+                "82186c448cab7944"
+            ]
+        ]
+    },
+    {
+        "id": "bfaefe448e87f319",
+        "type": "victron-output-relay",
+        "z": "ee316a5134bafa11",
+        "outputs": 0,
+        "service": "com.victronenergy.system",
+        "path": "/Relay/1/State",
+        "serviceObj": {
+            "service": "com.victronenergy.system",
+            "name": "Venus device"
+        },
+        "pathObj": {
+            "path": "/Relay/1/State",
+            "type": "enum",
+            "name": "Venus relay 2 state",
+            "enum": {
+                "0": "Open",
+                "1": "Closed"
+            },
+            "mode": "both"
+        },
+        "initial": 0,
+        "name": "Cerbo relay 2",
+        "onlyChanges": false,
+        "roundValues": "no",
+        "rateLimit": 0,
+        "conditionalMode": false,
+        "condition1Operator": ">",
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "condition2Enabled": false,
+        "condition2Service": "",
+        "condition2Path": "",
+        "condition2Operator": ">",
+        "logicOperator": "AND",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "outputOnChange": false,
+        "debounce": 2000,
+        "x": 1040,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "99ff09842150a809",
+        "type": "comment",
+        "z": "ee316a5134bafa11",
+        "name": "Readme",
+        "info": "Two nodes need to be installed:\n1 (needed) :  threshold-hysteresis \n2 (optional) : interactive-inject\n\nAn additional contactor is used to completely disconnect the system from the power grid. This is connected into Relay 2 in the Cerbo and use COM to NC contacts. Then the Cerbo needs setting - Integration - Relay 2 - Polarity = Normally closed\n\nThe Cerbo DI is used to override the Soc/Volt logic externally.\n\nNote: After a full deploy (to Multiplus), sometimes 3 messages arrive at same time",
+        "x": 580,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "dec5ebc264b9f040",
+        "type": "victron-event",
+        "z": "ee316a5134bafa11",
+        "name": "VRM notification",
+        "severity": 2,
+        "app": "Muliplus switch posititon",
+        "x": 1160,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9f39814164a9eebf",
+        "type": "change",
+        "z": "ee316a5134bafa11",
+        "name": "adjust msg",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "set to Inverter only",
+                "tot": "str"
+            }
+        ],
+        "x": 970,
+        "y": 500,
+        "wires": [
+            [
+                "dec5ebc264b9f040"
+            ]
+        ]
+    },
+    {
+        "id": "190ceb811471a91c",
+        "type": "change",
+        "z": "ee316a5134bafa11",
+        "name": "adjust msg",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "set to On mode",
+                "tot": "str"
+            }
+        ],
+        "x": 970,
+        "y": 580,
+        "wires": [
+            [
+                "dec5ebc264b9f040"
+            ]
+        ]
+    },
+    {
+        "id": "fa07c75ce8cb49bc",
+        "type": "victron-input-relay",
+        "z": "ee316a5134bafa11",
+        "outputs": 1,
+        "service": "com.victronenergy.system",
+        "path": "/Relay/1/State",
+        "serviceObj": {
+            "service": "com.victronenergy.system",
+            "name": "Venus system",
+            "communityTag": "relay"
+        },
+        "pathObj": {
+            "path": "/Relay/1/State",
+            "type": "enum",
+            "name": "Venus relay 2 state",
+            "enum": {
+                "0": "Open",
+                "1": "Closed"
+            },
+            "mode": "both"
+        },
+        "name": "Relay 2 state",
+        "onlyChanges": true,
+        "roundValues": "no",
+        "rateLimit": 0,
+        "conditionalMode": false,
+        "condition1HysteresisEnabled": false,
+        "condition1HysteresisThreshold": "",
+        "outputTrue": "true",
+        "outputFalse": "false",
+        "debounce": "2000",
+        "x": 790,
+        "y": 100,
+        "wires": [
+            [
+                "c444dd426742718d"
+            ]
+        ]
+    },
+    {
+        "id": "c444dd426742718d",
+        "type": "function",
+        "z": "ee316a5134bafa11",
+        "name": "Sync flow.GridRelayState",
+        "func": "const v = Number(msg.payload);\n// Victron relay: 0=open(off), 1=closed(on)\nconst isOn = (v === 1);\n\nflow.set('GridRelayState', isOn);\n// optional: also expose boolean downstream\nmsg.payload = isOn;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2daa6bebb52bb31a",
+        "type": "switch",
+        "z": "ee316a5134bafa11",
+        "name": "send msg only when other relay value set",
+        "property": "GridRelayState",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "1",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "x": 440,
+        "y": 640,
+        "wires": [
+            [
+                "510bb6fa07a973bb"
+            ]
+        ]
+    },
+    {
+        "id": "4e235c22f6521ec6",
+        "type": "switch",
+        "z": "ee316a5134bafa11",
+        "name": "send msg only when other relay value set",
+        "property": "GridRelayState",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 1,
+        "x": 440,
+        "y": 500,
+        "wires": [
+            [
+                "59e634f5a2dc9ee7"
+            ]
+        ]
+    },
+    {
+        "id": "188a8ed045a0d259",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "@victronenergy/node-red-contrib-victron": "1.7.27",
+            "node-red-contrib-interactive-inject": "1.2.2",
+            "node-red-contrib-threshold-hysteresis": "1.0.0"
+        }
+    }
+]
